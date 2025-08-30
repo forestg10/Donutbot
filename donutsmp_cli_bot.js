@@ -4,13 +4,13 @@ const { exec } = require("child_process");
 const mineflayer = require("mineflayer");
 const readline = require("readline");
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder');
-const mcData = require('minecraft-data')('1.20.4'); // Replace with your server version
+const mcData = require('minecraft-data')('1.20.4');
 const toolPlugin = require('mineflayer-tool').plugin;
 const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
 const { authenticator } = require('prismarine-auth');
 
-const BOT_VERSION = "1.1"; // Local bot version
-const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/refs/heads/main/donutsmp_cli_bot.js";
+const BOT_VERSION = "1.1";
+const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/main/donutsmp_cli_bot.js";
 
 async function checkForUpdatesSingleFile() {
   try {
@@ -29,22 +29,17 @@ async function checkForUpdatesSingleFile() {
       console.log(`⚠️ Update available! Local: ${BOT_VERSION}, Remote: ${remoteVersion}`);
       console.log("Downloading update...");
 
-      fs.writeFileSync(__filename, remoteCode, "utf8"); // overwrite this file
-      console.log("Update complete. Restarting bot...");
+      fs.writeFileSync(__filename, remoteCode, "utf8");
+      console.log("Update complete. Please restart the bot manually to apply the update.");
 
-      exec(`node ${__filename}`, (err, stdout, stderr) => {
-        if (err) console.error("Restart error:", err);
-        process.exit(0);
-      });
-
-      return false; // stop current execution
+      return false;
     } else {
       console.log(`Bot is up to date (v${BOT_VERSION}).`);
       return true;
     }
   } catch (e) {
     console.error("Update check failed:", e.message);
-    return true; // continue anyway
+    return true;
   }
 }
 
@@ -63,15 +58,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-// ------------------------
-// Run update check at startup
-// ------------------------
-(async () => {
-  const proceed = await checkForUpdatesSingleFile();
-  if (!proceed) return;
-
-  // --- Continue with your bot creation code below ---
-})();
 
 
 
@@ -868,6 +854,7 @@ bot.on("error", (err) => {
   console.log("Bot error:", err.message);
   process.exit(1);
 });
+
 
 
 
