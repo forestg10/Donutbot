@@ -10,7 +10,7 @@ const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
 const { authenticator } = require('prismarine-auth');
 
 const BOT_VERSION = "1.1"; // Local bot version
-const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/refs/heads/main/donutsmp_cli_bot.js?token=GHSAT0AAAAAADKGV5C5PONNU7YLKC5HYD222FTIJUA";
+const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/refs/heads/main/donutsmp_cli_bot.js";
 
 async function checkForUpdatesSingleFile() {
   try {
@@ -868,5 +868,6 @@ bot.on("error", (err) => {
   console.log("Bot error:", err.message);
   process.exit(1);
 });
+
 
 
