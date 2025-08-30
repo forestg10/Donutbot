@@ -1,7 +1,3 @@
-// ========================
-// DonutSMP CLI Bot
-// Auto-update system included
-// ========================
 
 const axios = require("axios");
 const fs = require("fs");
@@ -14,18 +10,15 @@ const toolPlugin = require('mineflayer-tool').plugin;
 const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
 const { authenticator } = require('prismarine-auth');
 
-// ------------------------
-// Version & Update
-// ------------------------
 const BOT_VERSION = "1.0"; // Local bot version
-const REMOTE_URL = "https://raw.githubusercontent.com/YourUser/DonutBot/main/donutsmp_cli_bot.js"; // Raw GitHub URL
+const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/refs/heads/main/donutsmp_cli_bot.js?token=GHSAT0AAAAAADKGV5C5PONNU7YLKC5HYD222FTIJUA";
 
 async function checkForUpdatesSingleFile() {
   try {
     const res = await axios.get(REMOTE_URL);
     const remoteCode = res.data;
 
-    // Extract remote BOT_VERSION
+
     const match = remoteCode.match(/const BOT_VERSION\s*=\s*["'](.+)["']/);
     if (!match) {
       console.log("Could not find version info in remote file.");
@@ -39,7 +32,7 @@ async function checkForUpdatesSingleFile() {
       console.log("Downloading update...");
 
       fs.writeFileSync(__filename, remoteCode, "utf8"); // overwrite this file
-      console.log("✅ Update complete. Restarting bot...");
+      console.log("Update complete. Restarting bot...");
 
       exec(`node ${__filename}`, (err, stdout, stderr) => {
         if (err) console.error("Restart error:", err);
@@ -48,7 +41,7 @@ async function checkForUpdatesSingleFile() {
 
       return false; // stop current execution
     } else {
-      console.log(`✅ Bot is up to date (v${BOT_VERSION}).`);
+      console.log(`Bot is up to date (v${BOT_VERSION}).`);
       return true;
     }
   } catch (e) {
@@ -57,9 +50,7 @@ async function checkForUpdatesSingleFile() {
   }
 }
 
-// ------------------------
-// Load config from external file
-// ------------------------
+
 let config;
 try {
   config = JSON.parse(fs.readFileSync("config.json", "utf8"));
@@ -835,7 +826,7 @@ function spamTpahere() {
 }
 
 
-const { authenticator } = require('prismarine-auth');
+
 
 const bot = mineflayer.createBot({
   host: MINECRAFT_HOST,
