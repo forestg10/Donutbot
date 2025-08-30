@@ -1,4 +1,3 @@
-
 const axios = require("axios");
 const fs = require("fs");
 const { exec } = require("child_process");
@@ -17,7 +16,6 @@ async function checkForUpdatesSingleFile() {
   try {
     const res = await axios.get(REMOTE_URL);
     const remoteCode = res.data;
-
 
     const match = remoteCode.match(/const BOT_VERSION\s*=\s*["'](.+)["']/);
     if (!match) {
@@ -41,7 +39,7 @@ async function checkForUpdatesSingleFile() {
 
       return false; // stop current execution
     } else {
-      console.log(`Bot is up to date (v${BOT_VERSION}).`);
+      console.log(`✅ Bot is up to date (v${BOT_VERSION}).`);
       return true;
     }
   } catch (e) {
@@ -49,7 +47,6 @@ async function checkForUpdatesSingleFile() {
     return true; // continue anyway
   }
 }
-
 
 let config;
 try {
@@ -75,6 +72,8 @@ const rl = readline.createInterface({
 
   // --- Continue with your bot creation code below ---
 })();
+
+
 
 
 let farming = false;
@@ -843,28 +842,21 @@ let viewer;
 bot.once('spawn', () => {
   console.log('Bot spawned, waiting for chunks to load...');
 
-  viewer = mineflayerViewer(bot, { port: 3000, firstPerson: true });
-  console.log("Viewer instance:", viewer);
+  // Start prismarine viewer in orbit/panning mode only
+  viewer = mineflayerViewer(bot, { port: 3000, firstPerson: false });
+  console.log("Viewer running on http://localhost:3000 (panning mode)");
 
-  if (viewer && typeof viewer.listenToBotControls === "function") {
-    viewer.listenToBotControls();
-  } else {
-    console.warn("Viewer controls not available.");
-  }
-
-  setTimeout(() => {
-    if (bot.entity && viewer) {
-      viewer.setViewPosition(bot.entity.position);
-    }
-    showMenu();
-  }, 3000);
-
+  // Keep camera following bot's position
   setInterval(() => {
     if (bot.entity && viewer) {
       viewer.setViewPosition(bot.entity.position);
     }
   }, 1000);
+
+  // Show menu after a short delay
+  setTimeout(showMenu, 2000);
 });
+
 
 
 bot.on("end", (reason) => {
