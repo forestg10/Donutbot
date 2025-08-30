@@ -9,12 +9,13 @@ const toolPlugin = require('mineflayer-tool').plugin;
 const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
 const { authenticator } = require('prismarine-auth');
 
-const BOT_VERSION = "1.2";
+const BOT_VERSION = "1.1";
 const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/main/donutsmp_cli_bot.js";
 
 async function checkForUpdatesSingleFile() {
   try {
     const res = await axios.get(REMOTE_URL);
+    if (!res.data) throw new Error("No data received from remote file");
     const remoteCode = res.data;
 
     const match = remoteCode.match(/const BOT_VERSION\s*=\s*["'](.+)["']/);
@@ -22,19 +23,26 @@ async function checkForUpdatesSingleFile() {
       console.log("Could not find version info in remote file.");
       return true;
     }
-
     const remoteVersion = match[1];
 
-    if (remoteVersion !== BOT_VERSION) {
-      console.log(`⚠️ Update available! Local: ${BOT_VERSION}, Remote: ${remoteVersion}`);
+    const localFileContent = fs.readFileSync(__filename, "utf8");
+    const localMatch = localFileContent.match(/const BOT_VERSION\s*=\s*["'](.+)["']/);
+    const localVersion = localMatch ? localMatch[1] : BOT_VERSION;
+
+    if (remoteVersion !== localVersion) {
+      console.log(`⚠️ Update available! Local: ${localVersion}, Remote: ${remoteVersion}`);
       console.log("Downloading update...");
 
-      fs.writeFileSync(__filename, remoteCode, "utf8");
-      console.log("Update complete. Please restart the bot manually to apply the update.");
+      try {
+        fs.writeFileSync(__filename, remoteCode, "utf8");
+        console.log("Update complete. Please restart the bot manually to apply the update.");
+      } catch (writeErr) {
+        console.error("Failed to write update to disk:", writeErr.message);
+      }
 
       return false;
     } else {
-      console.log(`Bot is up to date (v${BOT_VERSION}).`);
+      console.log(`Bot is up to date (v${localVersion}).`);
       return true;
     }
   } catch (e) {
@@ -42,6 +50,7 @@ async function checkForUpdatesSingleFile() {
     return true;
   }
 }
+
 
 let config;
 try {
@@ -57,9 +66,6 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-
-
 
 
 let farming = false;
@@ -854,8 +860,5 @@ bot.on("error", (err) => {
   console.log("Bot error:", err.message);
   process.exit(1);
 });
-
-
-
 
 
