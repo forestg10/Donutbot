@@ -39,7 +39,7 @@ async function checkForUpdatesSingleFile() {
 
       return false; // stop current execution
     } else {
-      console.log(`✅ Bot is up to date (v${BOT_VERSION}).`);
+      console.log(`Bot is up to date (v${BOT_VERSION}).`);
       return true;
     }
   } catch (e) {
@@ -868,4 +868,5 @@ bot.on("error", (err) => {
   console.log("Bot error:", err.message);
   process.exit(1);
 });
+
 
