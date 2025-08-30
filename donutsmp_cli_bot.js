@@ -9,7 +9,7 @@ const toolPlugin = require('mineflayer-tool').plugin;
 const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
 const { authenticator } = require('prismarine-auth');
 
-const BOT_VERSION = "1.1";
+const BOT_VERSION = "1.2";
 const REMOTE_URL = "https://raw.githubusercontent.com/forestg10/Donutbot/main/donutsmp_cli_bot.js";
 
 async function checkForUpdatesSingleFile() {
@@ -854,6 +854,7 @@ bot.on("error", (err) => {
   console.log("Bot error:", err.message);
   process.exit(1);
 });
+
 
 
 
